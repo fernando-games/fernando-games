@@ -37,11 +37,7 @@ export default function Hero() {
                 </p>
 
                 <div className="mt-10">
-                    <HeroButtons
-                        primaryText="Montar PC"
-                        secondaryText="Explorar Loja"
-                        primaryAction="pc"
-                    />
+                    <HeroButtons secondaryText="Explorar Loja" />
                 </div>
             </div>
         </section>
