@@ -4,14 +4,21 @@ const MERCADO_LIVRE_AUTH_URL =
     "https://auth.mercadolivre.com.br/authorization";
 
 export async function GET(request: NextRequest) {
-    const clientId = process.env.ID_DO_CLIENTE_MERCADOLIVRE;
-    const redirectUri = process.env.URI_REDIRECIONADA_MERCADOLIVRE;
+    const clientId =
+        process.env.ID_DO_CLIENTE_MERCADOLIVRE ||
+        process.env.MERCADOLIVRE_CLIENT_ID;
+
+    const redirectUri =
+        process.env.URI_REDIRECIONADA_MERCADOLIVRE ||
+        process.env.MERCADOLIVRE_REDIRECT_URI;
 
     if (!clientId || !redirectUri) {
         return NextResponse.json(
             {
                 error:
-                    "Configuração do Mercado Livre não encontrada. Verifique as variáveis de ambiente.",
+                    "Configuração do Mercado Livre não encontrada.",
+                clientIdConfigured: Boolean(clientId),
+                redirectUriConfigured: Boolean(redirectUri),
             },
             { status: 500 }
         );
