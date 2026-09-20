@@ -1,10 +1,15 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
-export async function GET() {
+export async function GET(request: NextRequest) {
 
-    const connected =
-        Boolean(process.env.ID_DO_CLIENTE_MERCADOLIVRE) &&
-        Boolean(process.env.SEGREDO_DO_CLIENTE_MERCADOLIVRE);
+    const accessToken =
+        request.cookies.get(
+            "mercadolivre_access_token"
+        )?.value;
+
+
+    const connected = Boolean(accessToken);
+
 
     return NextResponse.json({
         connected,
