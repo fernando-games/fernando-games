@@ -6,6 +6,7 @@ import AtlasDock from "./AtlasDock";
 import AtlasFlow from "./AtlasFlow";
 import { useHome } from "../../context/HomeContext";
 import AtlasSpeech from "../../atlas/AtlasSpeech";
+import AtlasAdminPanel from "./admin/AtlasAdminPanel";
 
 
 type AtlasState =
@@ -57,6 +58,8 @@ export default function AtlasColumn() {
             <AtlasSpeech
                 message="Olá! 👋 Eu sou o Atlas."
             />
+            
+            <AtlasAdminPanel />
 
             <AtlasFlow
                 state={atlasState}
