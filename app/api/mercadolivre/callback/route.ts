@@ -3,6 +3,8 @@ import { NextRequest, NextResponse } from "next/server";
 const MERCADO_LIVRE_TOKEN_URL =
     "https://api.mercadolibre.com/oauth/token";
 
+export const dynamic = "force-dynamic";
+
 export async function GET(request: NextRequest) {
     try {
         const { searchParams } = new URL(request.url);
@@ -15,6 +17,17 @@ export async function GET(request: NextRequest) {
             process.env.SEGREDO_DO_CLIENTE_MERCADOLIVRE;
         const redirectUri =
             process.env.URI_REDIRECIONADA_MERCADOLIVRE;
+
+        /*
+         * Diagnóstico seguro:
+         * mostra somente os NOMES das variáveis relacionadas
+         * e se elas possuem algum valor.
+         *
+         * Nunca mostra o segredo.
+         */
+        const mercadoLivreEnvKeys = Object.keys(process.env).filter(
+            (key) => key.includes("MERCADOLIVRE")
+        );
 
         if (error) {
             return NextResponse.json(
@@ -37,6 +50,11 @@ export async function GET(request: NextRequest) {
             );
         }
 
+        /*
+         * Diagnóstico temporário.
+         *
+         * NÃO revela nenhum valor secreto.
+         */
         if (!clientId || !clientSecret || !redirectUri) {
             return NextResponse.json(
                 {
@@ -46,6 +64,11 @@ export async function GET(request: NextRequest) {
                         clientId: !clientId,
                         clientSecret: !clientSecret,
                         redirectUri: !redirectUri,
+                    },
+                    runtime: {
+                        mercadoLivreEnvKeys,
+                        nodeEnv: process.env.NODE_ENV ?? null,
+                        vercelEnv: process.env.VERCEL_ENV ?? null,
                     },
                 },
                 { status: 500 }
@@ -60,15 +83,19 @@ export async function GET(request: NextRequest) {
         body.set("code", code);
         body.set("redirect_uri", redirectUri);
 
-        const tokenResponse = await fetch(MERCADO_LIVRE_TOKEN_URL, {
-            method: "POST",
-            headers: {
-                Accept: "application/json",
-                "Content-Type": "application/x-www-form-urlencoded",
-            },
-            body: body.toString(),
-            cache: "no-store",
-        });
+        const tokenResponse = await fetch(
+            MERCADO_LIVRE_TOKEN_URL,
+            {
+                method: "POST",
+                headers: {
+                    Accept: "application/json",
+                    "Content-Type":
+                        "application/x-www-form-urlencoded",
+                },
+                body: body.toString(),
+                cache: "no-store",
+            }
+        );
 
         const tokenData = await tokenResponse.json();
 
