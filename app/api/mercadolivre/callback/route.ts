@@ -42,6 +42,11 @@ export async function GET(request: NextRequest) {
                 {
                     success: false,
                     error: "Configuração do Mercado Livre incompleta.",
+                    missing: {
+                        clientId: !clientId,
+                        clientSecret: !clientSecret,
+                        redirectUri: !redirectUri,
+                    },
                 },
                 { status: 500 }
             );
