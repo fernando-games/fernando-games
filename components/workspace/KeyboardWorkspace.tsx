@@ -24,7 +24,7 @@ const keyboardProducts: KeyboardProduct[] = [
         id: "g213",
         name: "Logitech G213 Prodigy",
         image: "/images/peripherals/g213.png",
-        price: "R$ 299,90",
+        price: "R$ 480",
         rating: 5,
         badge: "GAMER",
         affiliateUrl: "https://meli.la/33EmhdQ",
@@ -44,7 +44,7 @@ const keyboardProducts: KeyboardProduct[] = [
         id: "kumara",
         name: "Redragon Kumara K552",
         image: "/images/peripherals/kumara-k552.png",
-        price: "R$ 189,90",
+        price: "R$ 279",
         rating: 5,
         badge: "MAIS VENDIDO",
         affiliateUrl: "https://meli.la/1S8mAm8",
@@ -64,7 +64,7 @@ const keyboardProducts: KeyboardProduct[] = [
         id: "ornata",
         name: "Razer Ornata V3",
         image: "/images/peripherals/ornata-v3.png",
-        price: "R$ 399,90",
+        price: "R$ 388",
         rating: 5,
         badge: "PREMIUM",
         affiliateUrl: "https://meli.la/13xSwYe",
@@ -84,7 +84,7 @@ const keyboardProducts: KeyboardProduct[] = [
         id: "alloy",
         name: "HyperX Alloy Origins",
         image: "/images/peripherals/alloy-origins.png",
-        price: "R$ 449,90",
+        price: "R$ 307",
         rating: 5,
         badge: "PRO",
         affiliateUrl: "https://meli.la/2WRmi3s",
@@ -104,7 +104,7 @@ const keyboardProducts: KeyboardProduct[] = [
         id: "rog-scope",
         name: "ASUS ROG Strix Scope",
         image: "/images/peripherals/rog-scope.png",
-        price: "R$ 499,90",
+        price: "R$ 901",
         rating: 5,
         badge: "ROG",
         affiliateUrl: "https://meli.la/1hQykcJ",
@@ -124,10 +124,10 @@ const keyboardProducts: KeyboardProduct[] = [
         id: "k60",
         name: "Corsair K60 RGB Pro",
         image: "/images/peripherals/k60-rgb.png",
-        price: "R$ 429,90",
+        price: "R$ 469",
         rating: 5,
         badge: "RGB",
-        affiliateUrl: "https://meli.la/29pqQDF",
+        affiliateUrl: "https://meli.la/1WDaxKh",
         specs: [
             "Switches mecânicos",
             "Iluminação RGB",
@@ -252,16 +252,16 @@ export default function KeyboardWorkspace({
                                         setSelectedKeyboard(keyboard)
                                     }
                                     className={`group relative flex min-h-[350px] flex-col overflow-hidden rounded-2xl border text-left transition-all duration-300 ${selected
-                                            ? "border-cyan-300 shadow-[0_0_30px_rgba(34,211,238,0.18)]"
-                                            : "border-zinc-800 hover:-translate-y-1 hover:border-cyan-500/70 hover:shadow-[0_0_25px_rgba(34,211,238,0.12)]"
+                                        ? "border-cyan-300 shadow-[0_0_30px_rgba(34,211,238,0.18)]"
+                                        : "border-zinc-800 hover:-translate-y-1 hover:border-cyan-500/70 hover:shadow-[0_0_25px_rgba(34,211,238,0.12)]"
                                         } bg-zinc-950`}
                                 >
 
                                     {/* BRILHO DO CARD */}
                                     <div
                                         className={`pointer-events-none absolute inset-x-0 top-0 h-px transition ${selected
-                                                ? "bg-cyan-300 shadow-[0_0_15px_rgba(34,211,238,1)]"
-                                                : "bg-cyan-500/20 group-hover:bg-cyan-400/70"
+                                            ? "bg-cyan-300 shadow-[0_0_15px_rgba(34,211,238,1)]"
+                                            : "bg-cyan-500/20 group-hover:bg-cyan-400/70"
                                             }`}
                                     />
 
@@ -272,8 +272,8 @@ export default function KeyboardWorkspace({
 
                                         <span
                                             className={`absolute left-3 top-3 z-10 rounded-full border px-3 py-1 text-[9px] font-black tracking-wider ${selected
-                                                    ? "border-cyan-300 bg-cyan-400 text-black"
-                                                    : "border-cyan-500/40 bg-black/80 text-cyan-400"
+                                                ? "border-cyan-300 bg-cyan-400 text-black"
+                                                : "border-cyan-500/40 bg-black/80 text-cyan-400"
                                                 }`}
                                         >
                                             {keyboard.badge}
@@ -298,8 +298,8 @@ export default function KeyboardWorkspace({
 
                                         <h2
                                             className={`text-lg font-black leading-tight ${selected
-                                                    ? "text-cyan-400"
-                                                    : "text-white group-hover:text-cyan-400"
+                                                ? "text-cyan-400"
+                                                : "text-white group-hover:text-cyan-400"
                                                 }`}
                                         >
                                             {keyboard.name}
@@ -315,15 +315,11 @@ export default function KeyboardWorkspace({
                                             </span>
                                         </div>
 
-                                        <p className="mt-2 text-xl font-black text-cyan-400">
-                                            {keyboard.price}
-                                        </p>
-
                                         <div className="mt-auto pt-4">
                                             <span
                                                 className={`block rounded-lg border py-2.5 text-center text-xs font-black uppercase tracking-wider transition-all ${selected
-                                                        ? "border-cyan-400 bg-cyan-500 text-black shadow-[0_0_15px_rgba(34,211,238,0.2)]"
-                                                        : "border-cyan-500/40 text-cyan-400 group-hover:bg-cyan-500 group-hover:text-black"
+                                                    ? "border-cyan-400 bg-cyan-500 text-black shadow-[0_0_15px_rgba(34,211,238,0.2)]"
+                                                    : "border-cyan-500/40 text-cyan-400 group-hover:bg-cyan-500 group-hover:text-black"
                                                     }`}
                                             >
                                                 {selected
@@ -381,9 +377,14 @@ export default function KeyboardWorkspace({
                                 </span>
                             </div>
 
-                            <p className="mt-3 text-3xl font-black text-cyan-400">
-                                {selectedKeyboard.price}
-                            </p>
+                            <div className="mt-3">
+                                <p className="text-xs font-bold uppercase tracking-wider text-zinc-500">
+                                    A partir de
+                                </p>
+                                <p className="text-3xl font-black text-cyan-400">
+                                    {selectedKeyboard.price}
+                                </p>
+                            </div>
 
                             <div className="my-4 h-px bg-gradient-to-r from-cyan-500/40 via-zinc-800 to-transparent" />
 

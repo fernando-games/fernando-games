@@ -106,8 +106,8 @@ export default function HeroBanner({
 
             <div
                 className={`relative z-10 grid min-h-[300px] grid-cols-1 transition-all duration-500 lg:grid-cols-2 ${visible
-                        ? "translate-y-0 opacity-100"
-                        : "translate-y-3 opacity-0"
+                    ? "translate-y-0 opacity-100"
+                    : "translate-y-3 opacity-0"
                     }`}
             >
 
@@ -174,9 +174,7 @@ export default function HeroBanner({
                     <div className="relative z-20 mt-2">
 
                         <HeroButtons
-                            primaryText={banner.primaryButton}
                             secondaryText={banner.secondaryButton}
-                            primaryAction={banner.primaryAction}
                         />
 
                     </div>
@@ -264,8 +262,8 @@ export default function HeroBanner({
                         type="button"
                         onClick={() => changeBanner(index)}
                         className={`h-2 rounded-full transition-all duration-300 ${currentBanner === index
-                                ? "w-8 bg-cyan-400 shadow-lg shadow-cyan-400/50"
-                                : "w-2 bg-zinc-600 hover:bg-zinc-400"
+                            ? "w-8 bg-cyan-400 shadow-lg shadow-cyan-400/50"
+                            : "w-2 bg-zinc-600 hover:bg-zinc-400"
                             }`}
                     />
                 ))}

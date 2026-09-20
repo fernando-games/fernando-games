@@ -80,12 +80,9 @@ export default function FeaturedSection({
                                 {getStars(g203.rating)}
                             </p>
 
-                            <p className="mt-3 text-lg font-bold text-cyan-400 md:text-xl">
-                                {g203.price.toLocaleString("pt-BR", {
-                                    style: "currency",
-                                    currency: "BRL",
-                                })}
-                            </p>
+                            <div className="mt-3 inline-flex w-fit rounded-full border border-cyan-500/40 bg-cyan-500/10 px-3 py-1.5 text-xs font-black uppercase tracking-wider text-cyan-400">
+                                🔥 Destaque Fernando.Games
+                            </div>
 
                             <button
                                 onClick={(event) => {
@@ -188,12 +185,9 @@ export default function FeaturedSection({
                                 {getStars(secondProduct.rating)}
                             </p>
 
-                            <p className="mt-3 text-lg font-bold text-cyan-400 md:text-xl">
-                                {secondProduct.price.toLocaleString("pt-BR", {
-                                    style: "currency",
-                                    currency: "BRL",
-                                })}
-                            </p>
+                            <div className="mt-3 inline-flex w-fit rounded-full border border-cyan-500/40 bg-cyan-500/10 px-3 py-1.5 text-xs font-black uppercase tracking-wider text-cyan-400">
+                                🎮 Jogo em destaque
+                            </div>
 
                             <button
                                 className="mt-4 w-full rounded-lg bg-cyan-500 py-2 font-bold text-black transition hover:bg-cyan-400"
@@ -241,12 +235,9 @@ export default function FeaturedSection({
                                 {getStars(thirdProduct.rating)}
                             </p>
 
-                            <p className="mt-3 text-lg font-bold text-cyan-400 md:text-xl">
-                                {thirdProduct.price.toLocaleString("pt-BR", {
-                                    style: "currency",
-                                    currency: "BRL",
-                                })}
-                            </p>
+                            <div className="mt-3 inline-flex w-fit rounded-full border border-cyan-500/40 bg-cyan-500/10 px-3 py-1.5 text-xs font-black uppercase tracking-wider text-cyan-400">
+                                ⚔️ Ação • RPG
+                            </div>
 
                             <button
                                 className="mt-4 w-full rounded-lg bg-cyan-500 py-2 font-bold text-black transition hover:bg-cyan-400"

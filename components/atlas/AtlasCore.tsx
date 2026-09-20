@@ -5,15 +5,10 @@ import { useState } from "react";
 import AtlasAvatar from "./AtlasAvatar";
 import AtlasStatus from "./AtlasStatus";
 import AtlasSpeech from "./AtlasSpeech";
-import AtlasCommand from "./AtlasCommand";
 
-import { AtlasEngine } from "@/atlas/core/AtlasEngine";
 import { useHome } from "@/context/HomeContext";
 
-const atlasEngine = new AtlasEngine();
-
 export default function AtlasCore() {
-
     const { changeMode } = useHome();
 
     const [active, setActive] = useState(false);
@@ -23,47 +18,68 @@ export default function AtlasCore() {
     ]);
 
     async function typeMessage(text: string) {
+    setMessages([""]);
 
-        setMessages([""]);
+    let current = "";
 
-        let current = "";
+    for (let i = 0; i < text.length; i += 3) {
+        current += text.slice(i, i + 3);
 
-        for (const letter of text) {
+        setMessages([current]);
 
-            current += letter;
-
-            setMessages([current]);
-
-            await new Promise(resolve =>
-                setTimeout(resolve, 18)
-            );
-        }
+        await new Promise(resolve =>
+            setTimeout(resolve, 12)
+        );
     }
+}
 
     async function handleCommand(command: string) {
+        try {
+            setActive(true);
 
-        setActive(true);
+            const response = await fetch("/api/atlas", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    message: command,
+                }),
+            });
 
-        const response = await atlasEngine.process({
-            role: "user",
-            content: command,
-        });
+            if (!response.ok) {
+                throw new Error(
+                    `Erro na API do Atlas: ${response.status}`
+                );
+            }
 
-        await typeMessage(response.message);
+            const data = await response.json();
 
-        switch (response.action) {
+            await typeMessage(
+                data?.message ??
+                "Não recebi uma resposta do meu sistema de inteligência. 🤖"
+            );
 
-            case "build-pc":
-                changeMode("pc");
-                break;
+            switch (data?.action) {
+                case "build-pc":
+                    changeMode("pc");
+                    break;
 
-            case "open-promotions":
-                changeMode("promotion");
-                break;
+                case "open-promotions":
+                    changeMode("promotion");
+                    break;
 
-            case "open-games":
-                changeMode("games");
-                break;
+                case "open-games":
+                    changeMode("games");
+                    break;
+            }
+
+        } catch (error) {
+            console.error("Erro ao chamar Atlas:", error);
+
+            await typeMessage(
+                "Tive um problema para me conectar ao meu sistema de inteligência. 🤖"
+            );
         }
     }
 
@@ -98,16 +114,10 @@ export default function AtlasCore() {
                     hover:bg-cyan-500/20
                 "
             >
-                {active ? "🟢 ATLAS ONLINE" : "⚡ ATIVAR ATLAS"}
+                {active
+                    ? "🟢 ATLAS ONLINE"
+                    : "⚡ ATIVAR ATLAS"}
             </button>
-
-            <div className="mt-6">
-                <AtlasCommand
-                    onPc={() => handleCommand("pc")}
-                    onGames={() => handleCommand("games")}
-                    onPeripherals={() => handleCommand("peripherals")}
-                />
-            </div>
 
         </div>
     );

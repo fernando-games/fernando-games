@@ -1,40 +1,43 @@
 import { useHome } from "../../context/HomeContext";
-import { HomeMode } from "../../controllers/HomeController";
 
 type HeroButtonsProps = {
-    primaryText: string;
     secondaryText: string;
-    primaryAction: HomeMode;
 };
 
 export default function HeroButtons({
-    primaryText,
     secondaryText,
-    primaryAction,
 }: HeroButtonsProps) {
 
     const { changeMode } = useHome();
 
     return (
         <div className="mt-6 flex flex-wrap gap-4">
-            <button
-                onClick={() => {
-                    console.log("Botão clicado!");
-                    changeMode(primaryAction);
-                }}
-                className="rounded-xl border border-cyan-500 px-6 py-3 font-semibold text-cyan-400 transition hover:bg-cyan-500 hover:text-black"
-            >
-                🖥️ {primaryText}
-            </button>
 
             <button
-                onClick={() => {
-                    console.log("Botão clicado!");
-                }}
-                className="rounded-xl border border-zinc-700 px-6 py-3 font-semibold text-zinc-300 transition hover:border-cyan-500 hover:text-cyan-400"
+                type="button"
+                onClick={() => changeMode("store")}
+                className="
+                    rounded-xl
+                    border
+                    border-cyan-400
+                    bg-cyan-500/10
+                    px-7
+                    py-3
+                    font-semibold
+                    text-cyan-300
+                    shadow-lg
+                    shadow-cyan-500/10
+                    transition-all
+                    duration-300
+                    hover:-translate-y-0.5
+                    hover:bg-cyan-400
+                    hover:text-black
+                    hover:shadow-cyan-400/30
+                "
             >
                 ⭐ {secondaryText}
             </button>
+
         </div>
     );
 }

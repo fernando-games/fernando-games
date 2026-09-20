@@ -1,3 +1,4 @@
+import { AtlasAI } from "./AtlasAI";
 import { IntentRecognizer } from "../knowledge/IntentRecognizer";
 import { KnowledgeEngine } from "../knowledge/KnowledgeEngine";
 import { ConversationManager } from "./ConversationManager";
@@ -22,6 +23,7 @@ export class AtlasEngine {
     private recommendation = new RecommendationEngine();
     private productRecommendation = new ProductRecommendationEngine();
     private personality = new AtlasPersonality();
+    private ai = new AtlasAI();
 
     async process(message: AtlasMessage): Promise<AtlasResponse> {
 
@@ -169,9 +171,9 @@ export class AtlasEngine {
 
         }
 
-        // IA LOCAL (sem Gemini)
+        // IA DO ATLAS — NVIDIA NEMOTRON VIA OPENROUTER
 
-        const response = this.brain.think(message);
+        const response = await this.ai.think(message);
 
         return response;
     }
