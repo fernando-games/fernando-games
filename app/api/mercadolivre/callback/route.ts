@@ -12,69 +12,50 @@ export async function GET(request: NextRequest) {
         const code = searchParams.get("code");
         const error = searchParams.get("error");
 
-        const clientId = process.env.ID_DO_CLIENTE_MERCADOLIVRE;
+        const clientId =
+            process.env.ID_DO_CLIENTE_MERCADOLIVRE;
+
         const clientSecret =
             process.env.SEGREDO_DO_CLIENTE_MERCADOLIVRE;
+
         const redirectUri =
             process.env.URI_REDIRECIONADA_MERCADOLIVRE;
 
-        /*
-         * Diagnóstico seguro:
-         * mostra somente os NOMES das variáveis relacionadas
-         * e se elas possuem algum valor.
-         *
-         * Nunca mostra o segredo.
-         */
-        const mercadoLivreEnvKeys = Object.keys(process.env).filter(
-            (key) => key.includes("MERCADOLIVRE")
-        );
-
+        // Mercado Livre recusou ou cancelou a autorização
         if (error) {
-            return NextResponse.json(
-                {
-                    success: false,
-                    error: "Autorização do Mercado Livre não concluída.",
-                    details: error,
-                },
-                { status: 400 }
+            return NextResponse.redirect(
+                new URL(
+                    `/?mercadolivre=erro&motivo=${encodeURIComponent(error)}`,
+                    request.url
+                )
             );
         }
 
+        // Código de autorização não veio
         if (!code) {
-            return NextResponse.json(
-                {
-                    success: false,
-                    error: "Código de autorização não recebido.",
-                },
-                { status: 400 }
+            return NextResponse.redirect(
+                new URL(
+                    "/?mercadolivre=erro&motivo=code_ausente",
+                    request.url
+                )
             );
         }
 
-        /*
-         * Diagnóstico temporário.
-         *
-         * NÃO revela nenhum valor secreto.
-         */
+        // Configuração incompleta
         if (!clientId || !clientSecret || !redirectUri) {
-            return NextResponse.json(
-                {
-                    success: false,
-                    error: "Configuração do Mercado Livre incompleta.",
-                    missing: {
-                        clientId: !clientId,
-                        clientSecret: !clientSecret,
-                        redirectUri: !redirectUri,
-                    },
-                    runtime: {
-                        mercadoLivreEnvKeys,
-                        nodeEnv: process.env.NODE_ENV ?? null,
-                        vercelEnv: process.env.VERCEL_ENV ?? null,
-                    },
-                },
-                { status: 500 }
+            console.error(
+                "Configuração do Mercado Livre incompleta."
+            );
+
+            return NextResponse.redirect(
+                new URL(
+                    "/?mercadolivre=erro&motivo=configuracao",
+                    request.url
+                )
             );
         }
 
+        // Monta requisição para trocar o code pelo token
         const body = new URLSearchParams();
 
         body.set("grant_type", "authorization_code");
@@ -99,47 +80,52 @@ export async function GET(request: NextRequest) {
 
         const tokenData = await tokenResponse.json();
 
+        // Mercado Livre recusou a troca do código
         if (!tokenResponse.ok) {
             console.error(
                 "Erro ao obter token do Mercado Livre:",
                 tokenData
             );
 
-            return NextResponse.json(
-                {
-                    success: false,
-                    error:
-                        "Mercado Livre recusou a troca do código por token.",
-                    details: tokenData,
-                },
-                { status: tokenResponse.status }
+            return NextResponse.redirect(
+                new URL(
+                    "/?mercadolivre=erro&motivo=token",
+                    request.url
+                )
             );
         }
 
         const accessToken = tokenData.access_token;
         const refreshToken = tokenData.refresh_token;
 
+        // Access Token não veio
         if (!accessToken) {
-            return NextResponse.json(
-                {
-                    success: false,
-                    error:
-                        "Mercado Livre não retornou um Access Token.",
-                },
-                { status: 500 }
+            console.error(
+                "Mercado Livre não retornou Access Token."
+            );
+
+            return NextResponse.redirect(
+                new URL(
+                    "/?mercadolivre=erro&motivo=access_token",
+                    request.url
+                )
             );
         }
 
-        const response = NextResponse.json({
-            success: true,
-            message:
-                "Fernando.Games conectado ao Mercado Livre com sucesso!",
-            connected: true,
-            userId: tokenData.user_id ?? null,
-            expiresIn: tokenData.expires_in ?? null,
-            scope: tokenData.scope ?? null,
-        });
+        /*
+         * Agora a conexão deu certo.
+         *
+         * Criamos a resposta de redirecionamento
+         * para a página inicial da Fernando.Games.
+         */
+        const response = NextResponse.redirect(
+            new URL(
+                "/?mercadolivre=conectado",
+                request.url
+            )
+        );
 
+        // Access Token
         response.cookies.set(
             "mercadolivre_access_token",
             accessToken,
@@ -147,11 +133,12 @@ export async function GET(request: NextRequest) {
                 httpOnly: true,
                 secure: true,
                 sameSite: "lax",
-                path: "/api",
+                path: "/",
                 maxAge: tokenData.expires_in || 21600,
             }
         );
 
+        // Refresh Token
         if (refreshToken) {
             response.cookies.set(
                 "mercadolivre_refresh_token",
@@ -160,7 +147,8 @@ export async function GET(request: NextRequest) {
                     httpOnly: true,
                     secure: true,
                     sameSite: "lax",
-                    path: "/api",
+                    path: "/",
+                    maxAge: 60 * 60 * 24 * 180,
                 }
             );
         }
@@ -172,13 +160,11 @@ export async function GET(request: NextRequest) {
             error
         );
 
-        return NextResponse.json(
-            {
-                success: false,
-                error:
-                    "Erro interno ao conectar com o Mercado Livre.",
-            },
-            { status: 500 }
+        return NextResponse.redirect(
+            new URL(
+                "/?mercadolivre=erro&motivo=interno",
+                request.url
+            )
         );
     }
 }
